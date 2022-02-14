@@ -65,6 +65,7 @@
   <xsl:document>
     <db:book>
       <header>
+        <tmp:apply-templates select="db:mediaobject[@role='cover']"/>
         <tmp:apply-templates select="db:title">
           <h1><tmp:content/></h1>
         </tmp:apply-templates>
