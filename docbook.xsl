@@ -97,6 +97,12 @@
 
 <!-- ============================================================ -->
 
+<xsl:template match="db:mediaobject" mode="m:titlepage">
+  <xsl:apply-templates select="." mode="m:docbook"/>
+</xsl:template>
+
+<!-- ============================================================ -->
+
 <xsl:template match="*" mode="m:html-head-links">
   <xsl:next-match/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
