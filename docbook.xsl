@@ -110,6 +110,17 @@
           src="https://kit.fontawesome.com/498b6706f0.js" crossorigin="anonymous"/>
 </xsl:template>
 
+<xsl:template match="*" mode="m:html-body-script">
+  <xsl:param name="rootbaseuri"/>
+  <xsl:param name="chunkbaseuri"/>
+  <!-- hack -->
+  <xsl:if test="ends-with($chunkbaseuri, '/index.html')">
+    <div class="nineml-float" title="Part of the NineML family">
+      <a href="https://nineml.org/"><img src="/icon/nineml.png" alt="NineML logo"/></a>
+    </div>
+  </xsl:if>
+</xsl:template>
+
 <!-- ============================================================ -->
 
 <xsl:template name="t:top-nav">
