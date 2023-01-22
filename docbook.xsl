@@ -16,7 +16,7 @@
 
 <xsl:import href="https://cdn.docbook.org/release/xsltng/current/xslt/docbook.xsl"/>
 <!--
-<xsl:import href="/Users/ndw/Projects/docbook/xslTNG/build/xslt/docbook.xsl"/>
+<xsl:import href="/Volumes/Projects/docbook/xslTNG/build/xslt/docbook.xsl"/>
 -->
 
 <xsl:param name="lists-of-figures"  select="'false'"/>
@@ -37,8 +37,6 @@
            select="('parent::db:book')"/>
 
 <xsl:param name="persistent-toc" select="'true'"/>
-<xsl:param name="persistent-toc-css"
-           select="'css/toc.css'"/>
 <xsl:variable name="v:toc-open" as="element()">
   <i class="far fa-book"/>
 </xsl:variable>
@@ -47,13 +45,6 @@
 </xsl:variable>
 <xsl:variable name="v:annotation-close" as="element()">
   <i class="far fa-window-close"/>
-</xsl:variable>
-
-<xsl:variable name="v:user-title-properties" as="element()*">
-  <title xpath="self::db:chapter"
-         number-format="1"
-         label="false"
-         inherit="{$division-numbers-inherit}"/>
 </xsl:variable>
 
 <!-- ============================================================ -->
@@ -97,12 +88,6 @@
 
 <!-- ============================================================ -->
 
-<xsl:template match="db:mediaobject" mode="m:titlepage">
-  <xsl:apply-templates select="." mode="m:docbook"/>
-</xsl:template>
-
-<!-- ============================================================ -->
-
 <xsl:template match="*" mode="m:html-head-links">
   <xsl:next-match/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -125,156 +110,162 @@
 
 <xsl:template name="t:top-nav">
   <xsl:param name="docbook" as="node()" tunnel="yes"/>
+  <xsl:param name="chunk" as="xs:boolean"/>
   <xsl:param name="node" as="element()"/>
   <xsl:param name="prev" as="element()?"/>
   <xsl:param name="next" as="element()?"/>
   <xsl:param name="up" as="element()?"/>
   <xsl:param name="top" as="element()?"/>
 
-  <span class="nav">
-    <a title="{$docbook/db:book/db:info/db:title}" href="{$top/@db-chunk/string()}">
-      <i class="fas fa-home"></i>
-    </a>
-    <xsl:text>&#160;</xsl:text>
+  <xsl:if test="$chunk">
+    <span class="nav">
+      <a title="{$docbook/db:book/db:info/db:title}" href="{$top/@db-chunk/string()}">
+        <i class="fas fa-home"></i>
+      </a>
+      <xsl:text>&#160;</xsl:text>
 
-    <xsl:choose>
-      <xsl:when test="exists($prev)">
-        <a href="{$prev/@db-chunk/string()}" title="{f:title-content($prev)}">
-          <i class="fas fa-arrow-left"></i>
-        </a>
-      </xsl:when>
-      <xsl:otherwise>
-        <span class="inactive">
-          <i class="fas fa-arrow-left"></i>
-        </span>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>&#160;</xsl:text>
+      <xsl:choose>
+        <xsl:when test="exists($prev)">
+          <a href="{$prev/@db-chunk/string()}" title="{f:title-content($prev)}">
+            <i class="fas fa-arrow-left"></i>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <span class="inactive">
+            <i class="fas fa-arrow-left"></i>
+          </span>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:text>&#160;</xsl:text>
 
-    <xsl:choose>
-      <xsl:when test="exists($up)">
-        <a title="{f:title-content($up)}" href="{$up/@db-chunk/string()}">
-          <i class="fas fa-arrow-up"></i>
-        </a>
-      </xsl:when>
-      <xsl:otherwise>
-        <span class="inactive">
-          <i class="fas fa-arrow-up"></i>
-        </span>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>&#160;</xsl:text>
+      <xsl:choose>
+        <xsl:when test="exists($up)">
+          <a title="{f:title-content($up)}" href="{$up/@db-chunk/string()}">
+            <i class="fas fa-arrow-up"></i>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <span class="inactive">
+            <i class="fas fa-arrow-up"></i>
+          </span>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:text>&#160;</xsl:text>
 
-    <xsl:choose>
-      <xsl:when test="exists($next)">
-        <a title="{f:title-content($next)}"
-           href="{$next/@db-chunk/string()}">
-          <i class="fas fa-arrow-right"></i>
-        </a>
-      </xsl:when>
-      <xsl:otherwise>
-        <span class="inactive">
-          <i class="fas fa-arrow-right"></i>
-        </span>
-      </xsl:otherwise>
-    </xsl:choose>
-  </span>
-  
-  <span class="title">
-    <i class="title"><xsl:value-of select="/h:html/h:head/h:title"/></i>
-  </span>
+      <xsl:choose>
+        <xsl:when test="exists($next)">
+          <a title="{f:title-content($next)}"
+             href="{$next/@db-chunk/string()}">
+            <i class="fas fa-arrow-right"></i>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <span class="inactive">
+            <i class="fas fa-arrow-right"></i>
+          </span>
+        </xsl:otherwise>
+      </xsl:choose>
+    </span>
+    
+    <span class="title">
+      <i class="title"><xsl:value-of select="/h:html/h:head/h:title"/></i>
+    </span>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="t:bottom-nav">
   <xsl:param name="docbook" as="node()" tunnel="yes"/>
+  <xsl:param name="chunk" as="xs:boolean"/>
   <xsl:param name="node" as="element()"/>
   <xsl:param name="prev" as="element()?"/>
   <xsl:param name="next" as="element()?"/>
   <xsl:param name="up" as="element()?"/>
   <xsl:param name="top" as="element()?"/>
 
-  <div class="navrow">
-    <div class="navleft">
-      <xsl:if test="count($prev)>0">
-        <a title="{f:title-content($prev)}" href="{$prev/@db-chunk/string()}">
-          <i class="fas fa-arrow-left"></i>
-        </a>
-      </xsl:if>
+  <xsl:if test="$chunk">
+    <div class="navrow">
+      <div class="navleft">
+        <xsl:if test="count($prev)>0">
+          <a title="{f:title-content($prev)}" href="{$prev/@db-chunk/string()}">
+            <i class="fas fa-arrow-left"></i>
+          </a>
+        </xsl:if>
+      </div>
+      <div class="navmiddle">
+        <xsl:if test="exists($top)">
+          <a title="{f:title-content($top)}" href="{$top/@db-chunk/string()}">
+            <i class="fas fa-home"></i>
+          </a>
+        </xsl:if>
+      </div>
+      <div class="navright">
+        <xsl:if test="count($next)>0">
+          <a title="{f:title-content($next)}" href="{$next/@db-chunk/string()}">
+            <i class="fas fa-arrow-right"></i>
+          </a>
+        </xsl:if>
+      </div>
     </div>
-    <div class="navmiddle">
-      <xsl:if test="exists($top)">
-        <a title="{f:title-content($top)}" href="{$top/@db-chunk/string()}">
-          <i class="fas fa-home"></i>
-        </a>
-      </xsl:if>
-    </div>
-    <div class="navright">
-      <xsl:if test="count($next)>0">
-        <a title="{f:title-content($next)}" href="{$next/@db-chunk/string()}">
-          <i class="fas fa-arrow-right"></i>
-        </a>
-      </xsl:if>
-    </div>
-  </div>
 
-  <div class="navrow">
-    <div class="navleft navtitle">
-      <xsl:value-of select="f:title-content($prev)"/>
+    <div class="navrow">
+      <div class="navleft navtitle">
+        <xsl:value-of select="f:title-content($prev)"/>
+      </div>
+      <div class="navmiddle">
+        <xsl:if test="count($up) gt 0">
+          <a title="{f:title-content($up)}" href="{$up/@db-chunk/string()}">
+            <i class="fas fa-arrow-up"></i>
+          </a>
+        </xsl:if>
+      </div>
+      <div class="navright navtitle">
+        <xsl:value-of select="f:title-content($next)"/>
+      </div>
     </div>
-    <div class="navmiddle">
-      <xsl:if test="count($up) gt 0">
-        <a title="{f:title-content($up)}" href="{$up/@db-chunk/string()}">
-          <i class="fas fa-arrow-up"></i>
-        </a>
-      </xsl:if>
-    </div>
-    <div class="navright navtitle">
-      <xsl:value-of select="f:title-content($next)"/>
-    </div>
-  </div>
 
-  <xsl:variable name="db-node"
-                select="if ($node/@db-id)
-                        then key('genid', $node/@db-id, $docbook)
-                        else $docbook"/>
+    <xsl:variable name="db-node"
+                  select="if ($node/@db-id)
+                          then key('genid', $node/@db-id, $docbook)
+                          else $docbook"/>
 
-  <div class="infofooter">
-    <xsl:variable name="years" select="root($db-node)/db:book/db:info/db:copyright/db:year"/>
-    <span class="copyrightfooter">
-      <xsl:text>Copyright</xsl:text>
-      <xsl:text> &#xA9; </xsl:text>
-      <xsl:value-of select="$years[1]"/>
-      <xsl:if test="count($years) gt 1">
-        <xsl:text>–</xsl:text>
-        <xsl:value-of select="root($db-node)/db:book/db:info/db:copyright/db:year[last()]"/>
-      </xsl:if>
-      <xsl:text> Norman Walsh.</xsl:text>
-    </span>
-
-    <xsl:if test="$db-node/db:info/db:releaseinfo[@role='hash']">
-      <xsl:variable name="hash"
-                    select="$db-node/db:info/db:releaseinfo[@role='hash']"/>
-
-      <span class="revision">
-        <xsl:attribute name="title"
-                       select="'git hash: '
-                               || substring($hash, 1, 6)
-                               || '…'"/>
-        <xsl:text>Last revised by </xsl:text>
-        <xsl:value-of
-            select="substring-before($db-node/db:info/db:releaseinfo[@role='author'],
-                                     ' &lt;')"/>
-        <xsl:text> on </xsl:text>
-        <xsl:for-each select="$db-node/db:info/db:pubdate">
-          <!-- hack: there should be only one -->
-          <xsl:if test=". castable as xs:dateTime">
-            <xsl:value-of select="format-dateTime(. cast as xs:dateTime,
-                                                  '[D1] [MNn,*-3] [Y0001]')"/>
-          </xsl:if>
-        </xsl:for-each>
+    <div class="infofooter">
+      <xsl:variable name="years" select="root($db-node)/db:book/db:info/db:copyright/db:year"/>
+      <span class="copyrightfooter">
+        <xsl:text>Copyright</xsl:text>
+        <xsl:text> &#xA9; </xsl:text>
+        <xsl:value-of select="$years[1]"/>
+        <xsl:if test="count($years) gt 1">
+          <xsl:text>–</xsl:text>
+          <xsl:value-of select="root($db-node)/db:book/db:info/db:copyright/db:year[last()]"/>
+        </xsl:if>
+        <xsl:text> Norman Walsh.</xsl:text>
       </span>
-    </xsl:if>
-  </div>
+
+      <xsl:if test="$db-node/db:info/db:releaseinfo[@role='hash']">
+        <xsl:variable name="hash"
+                      select="$db-node/db:info/db:releaseinfo[@role='hash']"/>
+
+        <span class="revision">
+          <xsl:attribute name="title"
+                         select="'git hash: '
+                                 || substring($hash, 1, 6)
+                                 || '…'"/>
+          <xsl:text>Last revised by </xsl:text>
+          <xsl:value-of
+              select="substring-before($db-node/db:info/db:releaseinfo[@role='author'],
+                      ' &lt;')"/>
+          <xsl:text> on </xsl:text>
+          <xsl:for-each select="$db-node/db:info/db:pubdate">
+            <!-- hack: there should be only one -->
+            <xsl:if test=". castable as xs:dateTime">
+              <xsl:value-of select="format-dateTime(. cast as xs:dateTime,
+                                    '[D1] [MNn,*-3] [Y0001]')"/>
+            </xsl:if>
+          </xsl:for-each>
+        </span>
+      </xsl:if>
+    </div>
+  </xsl:if>
 </xsl:template>
 
 <xsl:function name="f:title-content" as="node()*">
