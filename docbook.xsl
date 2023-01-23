@@ -19,6 +19,8 @@
 <xsl:import href="/Volumes/Projects/docbook/xslTNG/build/xslt/docbook.xsl"/>
 -->
 
+<xsl:param name="revhistory-style" select="'list'"/>
+
 <xsl:param name="lists-of-figures"  select="'false'"/>
 <xsl:param name="lists-of-tables"   select="'false'"/>
 <xsl:param name="lists-of-examples" select="'false'"/>
