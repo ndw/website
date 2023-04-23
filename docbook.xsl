@@ -31,7 +31,7 @@
 
 <xsl:param name="resource-base-uri" select="'/'"/>
 
-<xsl:param name="component-numbers-inherit" select="'true'"/>
+<xsl:param name="sections-inherit-from" select="'component section'"/>
 <xsl:param name="callout-default-column" select="50"/>
 
 <xsl:param name="chunk-section-depth" select="0"/>
