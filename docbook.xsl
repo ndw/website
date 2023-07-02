@@ -27,6 +27,8 @@
 <xsl:param name="lists-of-equations" select="'false'"/>
 <xsl:param name="lists-of-procedures" select="'false'"/>
 
+<xsl:param name="formal-object-title-placement" select="'before'"/>
+
 <xsl:param name="section-toc-depth" select="1"/>
 
 <xsl:param name="resource-base-uri" select="'/'"/>
